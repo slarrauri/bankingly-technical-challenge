@@ -58,3 +58,15 @@ def test_start_investigation_and_approval_flow(client):
         headers={"X-Institution-Id": "BANK-RIO-SUR", "X-Analyst-Id": "ANA-0091"},
     )
     assert exec_dup_res.status_code == 409
+
+
+def test_get_alert_context_endpoint(client):
+    res = client.get("/api/v1/alerts/AML-001/context", headers={"X-Institution-Id": "BANK-RIO-SUR"})
+    assert res.status_code == 200
+    body = res.json()["data"]
+    assert body["alert"]["id"] == "AML-001"
+    assert body["customer"]["customer_id"] == "CUST-004"
+    assert body["customer"]["occupation"] == "Software Consultant"
+    assert "current_period_inflow" in body["transaction_summary"]
+    assert "volume_change_percentage" in body["transaction_summary"]
+

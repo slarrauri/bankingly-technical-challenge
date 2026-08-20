@@ -74,57 +74,57 @@
           <!-- Left Column: Customer KYC & Transactions -->
           <div class="context-column">
             <!-- KYC Card -->
-            <div class="glass-card kyc-card">
+            <div class="glass-card kyc-card" id="kycCardContainer">
               <div class="card-title">
                 <span>📄 Perfil KYC Declarado</span>
-                <span class="status-chip verified" id="kycStatusBadge">VERIFIED</span>
+                <span class="status-chip" id="kycStatusBadge">CARGANDO...</span>
               </div>
-              <div class="kyc-details-grid">
+              <div class="kyc-details-grid" id="kycDetailsGrid">
                 <div class="kyc-field">
                   <label>Ocupación</label>
-                  <span id="kycOccupation">Software Consultant</span>
+                  <span id="kycOccupation">-</span>
                 </div>
                 <div class="kyc-field">
                   <label>Ingreso Declarado</label>
-                  <span class="highlight-val" id="kycIncome">USD 4,500.00 / mes</span>
+                  <span class="highlight-val" id="kycIncome">-</span>
                 </div>
                 <div class="kyc-field full-width">
                   <label>Origen de Fondos</label>
-                  <span id="kycFundsSource">Professional consulting services</span>
+                  <span id="kycFundsSource">-</span>
                 </div>
                 <div class="kyc-field full-width">
                   <label>Notas de Cumplimiento</label>
-                  <p class="kyc-notes-text" id="kycNotes">Customer indicated that occasional international consulting projects may generate additional income.</p>
+                  <p class="kyc-notes-text" id="kycNotes">-</p>
                 </div>
               </div>
             </div>
 
             <!-- Transaction Summary Card -->
-            <div class="glass-card summary-card">
+            <div class="glass-card summary-card" id="summaryCardContainer">
               <div class="card-title">
                 <span>📊 Análisis Transaccional (30 Días)</span>
-                <span class="metric-chip highlight" id="volChangeChip">+342.0% Volumen</span>
+                <span class="metric-chip" id="volChangeChip">-</span>
               </div>
-              <div class="summary-metrics-grid">
+              <div class="summary-metrics-grid" id="summaryMetricsGrid">
                 <div class="metric-box">
                   <label>Ingresos Recientes</label>
-                  <div class="val text-success" id="recentInflow">$61,500.00</div>
+                  <div class="val text-success" id="recentInflow">-</div>
                 </div>
                 <div class="metric-box">
                   <label>Egresos Recientes</label>
-                  <div class="val text-danger" id="recentOutflow">$58,900.00</div>
+                  <div class="val text-danger" id="recentOutflow">-</div>
                 </div>
                 <div class="metric-box">
                   <label>Ratio vs Ingreso</label>
-                  <div class="val" id="incomeRatio">13.67x</div>
+                  <div class="val" id="incomeRatio">-</div>
                 </div>
                 <div class="metric-box">
                   <label>Nuevas Contrapartes</label>
-                  <div class="val text-warning" id="newCounterparties">CP-009, CP-011</div>
+                  <div class="val text-warning" id="newCounterparties">-</div>
                 </div>
               </div>
               <div class="deterministic-math-note">
-                ⚡ Calculado determinísticamente por <code>get_transaction_summary</code> en Python (ADR-005).
+                ⚡ Calculado determinísticamente por <code>get_transaction_summary</code> en Python desde SQLite (ADR-005).
               </div>
             </div>
           </div>
@@ -137,7 +137,7 @@
                   <span class="robot-icon">🤖</span>
                   <div>
                     <h3>Informe de Investigación del Copilot</h3>
-                    <p class="copilot-status-line">Estado: <strong id="invStatusLabel">AWAITING_APPROVAL</strong> | Confianza: <strong id="confidenceLabel">86%</strong></p>
+                    <p class="copilot-status-line">Estado: <strong id="invStatusLabel">PENDIENTE</strong> | Confianza: <strong id="confidenceLabel">-</strong></p>
                   </div>
                 </div>
                 <button class="btn btn-primary" id="btnInvestigateAlert">
@@ -145,10 +145,25 @@
                 </button>
               </div>
 
-              <div class="copilot-body" id="copilotBody">
+              <!-- Empty State: Displayed before investigation is triggered -->
+              <div class="copilot-empty-state" id="copilotEmptyState">
+                <div class="empty-state-icon">📋</div>
+                <h4 class="empty-state-title">Investigación no iniciada</h4>
+                <p class="empty-state-desc">
+                  Esta alerta no cuenta con un informe analítico preliminar. Haga clic en <strong>"⚡ Investigar con Copilot"</strong> para recolectar evidencia de transacciones, consultar el perfil KYC, contrastar con las políticas institucionales y generar una recomendación explicable.
+                </p>
+                <div class="empty-state-features">
+                  <div class="feature-item"><span>🔍</span> Recolección autónoma de evidencia</div>
+                  <div class="feature-item"><span>⚖️</span> Contraste de políticas AML (P-001 a P-004)</div>
+                  <div class="feature-item"><span>🛡️</span> Control estricto Human-in-the-Loop</div>
+                </div>
+              </div>
+
+              <!-- Full Investigation Report: Displayed once investigation is generated -->
+              <div class="copilot-body" id="copilotReportContent" style="display: none;">
                 <div class="executive-summary-box">
                   <h4>Resumen Ejecutivo</h4>
-                  <p id="invSummaryText">Seleccione "Investigar con Copilot" para iniciar la recolección autónoma de evidencia y el contraste de políticas.</p>
+                  <p id="invSummaryText"></p>
                 </div>
 
                 <!-- Structured Findings -->
@@ -163,36 +178,32 @@
                 <div class="two-col-meta">
                   <div class="missing-info-box">
                     <h4>⚠️ Información Faltante</h4>
-                    <ul id="missingInfoList">
-                      <li>Ninguna información faltante identificada aún.</li>
-                    </ul>
+                    <ul id="missingInfoList"></ul>
                   </div>
                   <div class="policies-box">
                     <h4>📜 Políticas AML Disparadas</h4>
-                    <div class="policy-tags-container" id="policyTagsContainer">
-                      <!-- Policy chips -->
-                    </div>
+                    <div class="policy-tags-container" id="policyTagsContainer"></div>
                   </div>
                 </div>
 
                 <!-- Recommendation Action Box -->
                 <div class="recommendation-callout" id="recommendationBox">
                   <div class="rec-title">Recomendación Propuesta para el Analista:</div>
-                  <div class="rec-action-badge" id="recActionBadge">ESCALATE_ALERT (SAR Filing)</div>
-                  <p class="rec-rationale" id="recRationaleText">Justificación pendiente de investigación.</p>
+                  <div class="rec-action-badge" id="recActionBadge"></div>
+                  <p class="rec-rationale" id="recRationaleText"></p>
                 </div>
               </div>
 
               <!-- Human Decision Action Bar (INV-001, INV-002) -->
-              <div class="decision-action-bar" id="decisionActionBar">
+              <div class="decision-action-bar" id="decisionActionBar" style="display: none;">
                 <div class="decision-hint">
                   🛡️ <strong>Human-in-the-Loop:</strong> La acción solo se ejecutará tras la aprobación humana explícita.
                 </div>
                 <div class="decision-buttons">
-                  <button class="btn btn-success" id="btnApproveAction">
+                  <button class="btn btn-success" id="btnApproveAction" disabled>
                     <span>✅ Aprobar Recomendación</span>
                   </button>
-                  <button class="btn btn-outline" id="btnRejectAction">
+                  <button class="btn btn-outline" id="btnRejectAction" disabled>
                     <span>❌ Rechazar / Overrule</span>
                   </button>
                 </div>
@@ -202,6 +213,41 @@
         </div>
       </section>
     </main>
+
+    <!-- Central Investigation Progress Modal -->
+    <div class="modal-backdrop investigation-overlay" id="investigationProgressModal" style="display: none;">
+      <div class="investigation-progress-card">
+        <div class="investigation-spinner-container">
+          <div class="copilot-scanner-ring"></div>
+          <div class="copilot-scanner-icon">🤖</div>
+        </div>
+        <h3 class="investigation-progress-title">Copilot Investigando Alerta</h3>
+        <p class="investigation-progress-subtitle" id="investigationProgressSub">Ejecutando recopilación de evidencia con herramientas autorizadas...</p>
+        
+        <div class="investigation-steps-list">
+          <div class="step-item" id="stepKyc">
+            <span class="step-icon">⏳</span>
+            <span class="step-text">Consultando perfil KYC y registros del cliente en SQLite</span>
+          </div>
+          <div class="step-item" id="stepTransactions">
+            <span class="step-icon">⏳</span>
+            <span class="step-text">Calculando métricas transaccionales y análisis de volumen</span>
+          </div>
+          <div class="step-item" id="stepPolicies">
+            <span class="step-icon">⏳</span>
+            <span class="step-text">Contrastando hallazgos con las Políticas Institucionales AML</span>
+          </div>
+          <div class="step-item" id="stepRecommendation">
+            <span class="step-icon">⏳</span>
+            <span class="step-text">Estructurando reporte explicable y recomendación de cumplimiento</span>
+          </div>
+        </div>
+
+        <div class="investigation-progress-bar-container">
+          <div class="investigation-progress-bar" id="investigationProgressBar"></div>
+        </div>
+      </div>
+    </div>
 
     <!-- Decision Confirmation Modal -->
     <div class="modal-backdrop" id="decisionModal" style="display: none;">
