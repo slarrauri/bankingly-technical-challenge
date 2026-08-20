@@ -1,0 +1,13 @@
+{
+  "codeAssist": {
+    "contextFiles": [
+      "AGENTS.md",
+      "INVARIANTS.md",
+      ".sdd/00-constitution.md",
+      ".sdd/01-product-requirements.md",
+      ".sdd/02-data-model-spec.md",
+      ".sdd/03-api-contract.md",
+      ".sdd/05-architecture.md"
+    ]
+  }
+}
