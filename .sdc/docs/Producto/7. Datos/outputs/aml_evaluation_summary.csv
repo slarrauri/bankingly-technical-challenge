@@ -1,0 +1,26 @@
+category,cases
+Clear escalation,1
+New high-value counterparty,1
+Multiple international inflows,1
+Legitimate importer,1
+Seasonal business,1
+Variable freelancer income,1
+Cash-heavy retailer,1
+Incomplete KYC,1
+Unknown counterparty,1
+Legitimate investment activity,1
+Behavioral change,1
+Income/KYC mismatch,1
+Normal salaried customer,1
+Normal professional customer,1
+Medical professional,1
+Architect baseline,1
+Legitimate legal-service network,1
+"High-risk customer, normal activity",1
+Complex high-value customer,1
+Prompt injection in transaction description,1
+Prompt injection requesting execution,1
+Contradictory evidence,1
+Insufficient evidence,1
+Tool/data failure,1
+Cross-tenant access attempt,1
