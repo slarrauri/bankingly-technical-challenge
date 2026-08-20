@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AML Alert Investigation Copilot | Banco Río Sur</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="brand-section">
+        <div class="bank-logo">🏛️</div>
+        <div>
+          <h1 class="brand-title">BANCO RÍO SUR</h1>
+          <p class="brand-subtitle">AML Alert Investigation Copilot & Compliance Console</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <div class="system-status-pill">
+          <span class="status-indicator live"></span>
+          <span>Agent Harness: <strong id="harnessStatus">ACTIVE</strong></span>
+        </div>
+        <div class="analyst-badge">
+          <span class="analyst-avatar">👤</span>
+          <div>
+            <div class="analyst-name">Andrea Silva</div>
+            <div class="analyst-role">Senior Compliance Analyst</div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Grid -->
+    <main class="main-grid">
+      <!-- Left Sidebar: Alert Queue -->
+      <aside class="sidebar-panel">
+        <div class="panel-header">
+          <h2>Cola de Alertas AML</h2>
+          <span class="badge badge-count" id="alertCount">12</span>
+        </div>
+        <div class="filter-toolbar">
+          <input type="text" id="searchAlertInput" placeholder="Buscar por cliente o ID..." class="search-input">
+        </div>
+        <div class="alert-list" id="alertListContainer">
+          <div class="loading-state">Cargando alertas del sistema...</div>
+        </div>
+      </aside>
+
+      <!-- Center & Right: Investigation Workspace -->
+      <section class="workspace-panel">
+        <!-- Selected Alert Top Banner -->
+        <div class="workspace-header" id="workspaceHeader">
+          <div class="alert-headline">
+            <span class="alert-id-tag" id="selectedAlertId">AML-001</span>
+            <h2 id="selectedCustomerName">Martín Pereira</h2>
+            <span class="customer-id-pill" id="selectedCustomerId">CUST-004</span>
+          </div>
+          <div class="alert-meta-tags">
+            <div class="risk-score-badge high" id="selectedRiskBadge">
+              <span class="score-label">Riesgo</span>
+              <span class="score-value" id="selectedRiskScore">78 / 100</span>
+            </div>
+            <div class="alert-status-pill" id="selectedAlertStatus">OPEN</div>
+          </div>
+        </div>
+
+        <!-- Investigation Content Split -->
+        <div class="workspace-content" id="workspaceContent">
+          <!-- Left Column: Customer KYC & Transactions -->
+          <div class="context-column">
+            <!-- KYC Card -->
+            <div class="glass-card kyc-card" id="kycCardContainer">
+              <div class="card-title">
+                <span>📄 Perfil KYC Declarado</span>
+                <span class="status-chip" id="kycStatusBadge">CARGANDO...</span>
+              </div>
+              <div class="kyc-details-grid" id="kycDetailsGrid">
+                <div class="kyc-field">
+                  <label>Ocupación</label>
+                  <span id="kycOccupation">-</span>
+                </div>
+                <div class="kyc-field">
+                  <label>Ingreso Declarado</label>
+                  <span class="highlight-val" id="kycIncome">-</span>
+                </div>
+                <div class="kyc-field full-width">
+                  <label>Origen de Fondos</label>
+                  <span id="kycFundsSource">-</span>
+                </div>
+                <div class="kyc-field full-width">
+                  <label>Notas de Cumplimiento</label>
+                  <p class="kyc-notes-text" id="kycNotes">-</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Transaction Summary Card -->
+            <div class="glass-card summary-card" id="summaryCardContainer">
+              <div class="card-title">
+                <span>📊 Análisis Transaccional (30 Días)</span>
+                <span class="metric-chip" id="volChangeChip">-</span>
+              </div>
+              <div class="summary-metrics-grid" id="summaryMetricsGrid">
+                <div class="metric-box">
+                  <label>Ingresos Recientes</label>
+                  <div class="val text-success" id="recentInflow">-</div>
+                </div>
+                <div class="metric-box">
+                  <label>Egresos Recientes</label>
+                  <div class="val text-danger" id="recentOutflow">-</div>
+                </div>
+                <div class="metric-box">
+                  <label>Ratio vs Ingreso</label>
+                  <div class="val" id="incomeRatio">-</div>
+                </div>
+                <div class="metric-box">
+                  <label>Nuevas Contrapartes</label>
+                  <div class="val text-warning" id="newCounterparties">-</div>
+                </div>
+              </div>
+              <div class="deterministic-math-note">
+                ⚡ Calculado determinísticamente por <code>get_transaction_summary</code> en Python desde SQLite (ADR-005).
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column: Copilot Investigation & Findings -->
+          <div class="copilot-column">
+            <div class="glass-card copilot-card" id="copilotReportCard">
+              <div class="copilot-header">
+                <div class="copilot-title">
+                  <span class="robot-icon">🤖</span>
+                  <div>
+                    <h3>Informe de Investigación del Copilot</h3>
+                    <p class="copilot-status-line">Estado: <strong id="invStatusLabel">PENDIENTE</strong> | Confianza: <strong id="confidenceLabel">-</strong></p>
+                  </div>
+                </div>
+                <button class="btn btn-primary" id="btnInvestigateAlert">
+                  <span>⚡ Investigar con Copilot</span>
+                </button>
+              </div>
+
+              <!-- Empty State: Displayed before investigation is triggered -->
+              <div class="copilot-empty-state" id="copilotEmptyState">
+                <div class="empty-state-icon">📋</div>
+                <h4 class="empty-state-title">Investigación no iniciada</h4>
+                <p class="empty-state-desc">
+                  Esta alerta no cuenta con un informe analítico preliminar. Haga clic en <strong>"⚡ Investigar con Copilot"</strong> para recolectar evidencia de transacciones, consultar el perfil KYC, contrastar con las políticas institucionales y generar una recomendación explicable.
+                </p>
+                <div class="empty-state-features">
+                  <div class="feature-item"><span>🔍</span> Recolección autónoma de evidencia</div>
+                  <div class="feature-item"><span>⚖️</span> Contraste de políticas AML (P-001 a P-004)</div>
+                  <div class="feature-item"><span>🛡️</span> Control estricto Human-in-the-Loop</div>
+                </div>
+              </div>
+
+              <!-- Full Investigation Report: Displayed once investigation is generated -->
+              <div class="copilot-body" id="copilotReportContent" style="display: none;">
+                <div class="executive-summary-box">
+                  <h4>Resumen Ejecutivo</h4>
+                  <p id="invSummaryText"></p>
+                </div>
+
+                <!-- Structured Findings -->
+                <div class="findings-section">
+                  <h4>Hallazgos Estructurados & Citas de Evidencia</h4>
+                  <div class="findings-list" id="findingsList">
+                    <!-- Dynamic findings -->
+                  </div>
+                </div>
+
+                <!-- Missing info & policies -->
+                <div class="two-col-meta">
+                  <div class="missing-info-box">
+                    <h4>⚠️ Información Faltante</h4>
+                    <ul id="missingInfoList"></ul>
+                  </div>
+                  <div class="policies-box">
+                    <h4>📜 Políticas AML Disparadas</h4>
+                    <div class="policy-tags-container" id="policyTagsContainer"></div>
+                  </div>
+                </div>
+
+                <!-- Recommendation Action Box -->
+                <div class="recommendation-callout" id="recommendationBox">
+                  <div class="rec-title">Recomendación Propuesta para el Analista:</div>
+                  <div class="rec-action-badge" id="recActionBadge"></div>
+                  <p class="rec-rationale" id="recRationaleText"></p>
+                </div>
+              </div>
+
+              <!-- Human Decision Action Bar (INV-001, INV-002) -->
+              <div class="decision-action-bar" id="decisionActionBar" style="display: none;">
+                <div class="decision-hint">
+                  🛡️ <strong>Human-in-the-Loop:</strong> La acción solo se ejecutará tras la aprobación humana explícita.
+                </div>
+                <div class="decision-buttons">
+                  <button class="btn btn-success" id="btnApproveAction" disabled>
+                    <span>✅ Aprobar Recomendación</span>
+                  </button>
+                  <button class="btn btn-outline" id="btnRejectAction" disabled>
+                    <span>❌ Rechazar / Overrule</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Central Investigation Progress Modal -->
+    <div class="modal-backdrop investigation-overlay" id="investigationProgressModal" style="display: none;">
+      <div class="investigation-progress-card">
+        <div class="investigation-spinner-container">
+          <div class="copilot-scanner-ring"></div>
+          <div class="copilot-scanner-icon">🤖</div>
+        </div>
+        <h3 class="investigation-progress-title">Copilot Investigando Alerta</h3>
+        <p class="investigation-progress-subtitle" id="investigationProgressSub">Ejecutando recopilación de evidencia con herramientas autorizadas...</p>
+        
+        <div class="investigation-steps-list">
+          <div class="step-item" id="stepKyc">
+            <span class="step-icon">⏳</span>
+            <span class="step-text">Consultando perfil KYC y registros del cliente en SQLite</span>
+          </div>
+          <div class="step-item" id="stepTransactions">
+            <span class="step-icon">⏳</span>
+            <span class="step-text">Calculando métricas transaccionales y análisis de volumen</span>
+          </div>
+          <div class="step-item" id="stepPolicies">
+            <span class="step-icon">⏳</span>
+            <span class="step-text">Contrastando hallazgos con las Políticas Institucionales AML</span>
+          </div>
+          <div class="step-item" id="stepRecommendation">
+            <span class="step-icon">⏳</span>
+            <span class="step-text">Estructurando reporte explicable y recomendación de cumplimiento</span>
+          </div>
+        </div>
+
+        <div class="investigation-progress-bar-container">
+          <div class="investigation-progress-bar" id="investigationProgressBar"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Decision Confirmation Modal -->
+    <div class="modal-backdrop" id="decisionModal" style="display: none;">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h3>Confirmación de Decisión de Cumplimiento</h3>
+          <button class="close-btn" id="btnCloseModal">×</button>
+        </div>
+        <div class="modal-body">
+          <p>Usted está a punto de autorizar la ejecución de la siguiente acción sobre la alerta <strong id="modalAlertId">AML-001</strong>:</p>
+          <div class="action-highlight-box" id="modalActionName">ESCALATE_ALERT (SAR Filing)</div>
+          <div class="form-group">
+            <label for="analystNotesInput">Notas del Analista (Obligatorio para Auditoría):</label>
+            <textarea id="analystNotesInput" rows="3" placeholder="Ingrese el fundamento o validación adicional para el registro de auditoría..."></textarea>
+          </div>
+          <div class="modal-warning">
+            🔒 Esta acción generará un registro inmutable en <code>AuditEvent</code> y actualizará el estado oficial de la alerta bancaria (INV-002).
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" id="btnCancelModal">Cancelar</button>
+          <button class="btn btn-primary" id="btnConfirmExecution">Confirmar y Ejecutar Acción</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
