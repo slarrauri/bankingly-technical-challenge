@@ -6,7 +6,7 @@ FROM python:3.11-slim
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
-    PORT=8000
+    PORT=8081
 
 # Set working directory
 WORKDIR /app
@@ -33,11 +33,11 @@ RUN mkdir -p /app/storage && chown -R 10001:10001 /app
 USER 10001:10001
 
 # Expose standard FastAPI port
-EXPOSE 8000
+EXPOSE 8081
 
 # Healthcheck to ensure API and static frontend are responding
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
     CMD curl -f http://localhost:${PORT}/api/v1/health || exit 1
 
 # Start the application with uvicorn
-CMD ["uvicorn", "backend.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "backend.main:app", "--host", "0.0.0.0", "--port", "8081"]
