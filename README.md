@@ -18,6 +18,7 @@
 > 
 > En ese sentido, considero que el verdadero valor de este tipo de proceso está en **convertir una idea ambigua en una iniciativa suficientemente validada, documentada y estructurada como para que otro equipo pueda continuar el trabajo con la menor incertidumbre posible**.
 
+![image Capture](captura.png)
 
 > [!WARNING] Simulated Environment
 > This implementation is a **proof of concept** developed exclusively for evaluation purposes. It does **not connect to any external banking, AML, KYC, payment, or third-party systems**.
@@ -26,8 +27,10 @@
 > 
 > The implementation should therefore **not be considered production-ready** and must not be used to make real financial, compliance, or customer decisions.
 
-![[captura.png]]
-![[video.mp4]]
+## Video
+![Video Capture](video.mp4)
+
+
 
 ## 📑 Mapa de Entregables del Desafío
 
