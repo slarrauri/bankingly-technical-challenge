@@ -26,6 +26,9 @@
 > 
 > The implementation should therefore **not be considered production-ready** and must not be used to make real financial, compliance, or customer decisions.
 
+![[captura.png]]
+![[video.mp4]]
+
 ## 📑 Mapa de Entregables del Desafío
 
 Este repositorio contiene todos los artefactos requeridos por las bases del ejercicio técnico:
