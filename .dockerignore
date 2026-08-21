@@ -1,0 +1,41 @@
+# Git
+.git
+.gitignore
+.github
+
+# Python & Virtual Environments
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Testing & Coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Local databases & secrets
+*.db
+*.sqlite3
+.env
+.env.*
+!.env.example
+
+# IDE & Editor files
+.vscode/
+.idea/
+.cursor/
+.gemini/
+*.swp
+*.swo
+
+# Project documentation & notes
+.sdc/
+.sdd/
