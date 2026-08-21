@@ -1,4 +1,4 @@
-const API_BASE = "http://127.0.0.1:8000/api/v1";
+const API_BASE = "http://127.0.0.1:8081/api/v1";
 const INSTITUTION_ID = "BANK-RIO-SUR";
 const ANALYST_ID = "ANA-0091";
 
@@ -40,7 +40,7 @@ function setupEventListeners() {
 
   document.getElementById("searchAlertInput").addEventListener("input", (e) => {
     const term = e.target.value.toLowerCase();
-    const filtered = currentAlerts.filter(a => 
+    const filtered = currentAlerts.filter(a =>
       a.id.toLowerCase().includes(term) || a.customer_name.toLowerCase().includes(term)
     );
     renderAlertList(filtered);
@@ -94,7 +94,7 @@ function renderAlertList(alerts) {
   }).join("");
 }
 
-window.onAlertClick = function(alertId) {
+window.onAlertClick = function (alertId) {
   const alert = currentAlerts.find(a => a.id === alertId);
   if (alert) {
     selectAlert(alert);
@@ -168,7 +168,7 @@ function renderCustomerKyc(customer) {
   statusBadge.className = `status-chip ${customer.kyc_status === 'VERIFIED' ? 'verified' : (customer.kyc_status === 'INCOMPLETE' ? 'danger' : 'warning')}`;
 
   document.getElementById("kycOccupation").textContent = customer.occupation || "Desconocida";
-  
+
   const incomeVal = Number(customer.declared_monthly_income || 0).toLocaleString('en-US', {
     style: 'currency',
     currency: 'USD',
